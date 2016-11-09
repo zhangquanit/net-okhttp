@@ -1,0 +1,19 @@
+一、代理
+代理有助于减少安全性的外部威胁，同时还允许内部用户访问因特网服务
+1、可用的网络代理属性
+http://docs.oracle.com/javase/7/docs/api/java/net/doc-files/net-properties.html
+2、代理认证
+有些代理在授权用户访问因特网之前，要求用户输入用户名和口令。如果您使用位于防火墙之内的Web浏览器，
+您就可能碰到过这种情况。以下是执行认证的方法：
+//认证方式一
+URLConnection connection=url.openConnection(); 
+String password="username:password"; 
+String encodedAuth=base64Encode(password); 
+connection.setRequestProperty("Proxy-Authorization",encodedAuth);
+//认证方式二
+Authenticator.setDefault(new Authenticator() {
+			@Override
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(username,password);
+			}
+		});

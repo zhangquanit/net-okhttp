@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <Button
+        android:id="@+id/btn_get"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="GET请求"
+        />
+    <Button
+        android:id="@+id/btn_post"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="POST请求"
+        />
+    <Button
+        android:id="@+id/btn_postForm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Form表单请求"
+        />
+    <Button
+        android:id="@+id/btn_postFormData"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Form表单上传文件"
+        />
+    <Button
+        android:id="@+id/netrequest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NetRequestDemo"
+        />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:orientation="vertical">
+            <TextView
+                android:id="@+id/result"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
