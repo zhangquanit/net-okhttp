@@ -20,6 +20,7 @@ import okhttp.demo.util.HttpHeadInterceptor;
 import okhttp.demo.util.LoggingInterceptor;
 import okhttp.demo.util.NetworkspaceInterceptor;
 import okhttp3.Authenticator;
+import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Credentials;
@@ -61,8 +62,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_get: //Get请求
-//                doGet();
-                test();
+                doGet();
+//                test();
                 break;
             case R.id.btn_post: //Post请求
                 doPost();
@@ -101,14 +102,24 @@ public class MainActivity extends Activity implements View.OnClickListener {
     }
 
     private void prepareHttpClient(){
+        //日志拦截器
+//        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+//        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        LoggingInterceptor loggingInterceptor = new LoggingInterceptor();
+
+        //缓存
+        File cacheDir = new File(getExternalCacheDir(), "okhttp");
+        Cache cache = new Cache(cacheDir, 10 * 1024 * 1024);
+
         okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(5*1000, TimeUnit.MILLISECONDS) //链接超时
                 .readTimeout(10*1000,TimeUnit.MILLISECONDS) //读取超时
                 .writeTimeout(10*1000,TimeUnit.MILLISECONDS) //写入超时
                 .addInterceptor(new HttpHeadInterceptor()) //拦截器
                 .addNetworkInterceptor(new NetworkspaceInterceptor())//网络拦截器
-                .addInterceptor(new LoggingInterceptor())//日志拦截器
-                .authenticator(new Authenticator() {
+                .addInterceptor(loggingInterceptor)//日志拦截器
+                .cache(cache)  //设置缓存
+                .authenticator(new Authenticator() { //HTTP认证  当responseCode=401 时需要设置
                     @Override
                     public Request authenticate(Route route, Response response) throws IOException {
                         String auth = Credentials.basic("zhangquan", "123456");
@@ -118,20 +129,28 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 })
                 .build();
 
-//        try {
-//            okHttpClient= okHttpClient.newBuilder()
-//                    .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("www.baidu.com",80)))
-//                    .proxyAuthenticator(new Authenticator() {
-//                        @Override
-//                        public Request authenticate(Route route, Response response) throws IOException {
-//                            String auth = Credentials.basic("zhangquan", "123456");
-//                            Request request = response.request().newBuilder().addHeader("Proxy-Authorization", auth).build();
-//                            return request;
-//                        }
-//                    }).build();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        //设置代理
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    okHttpClient= okHttpClient.newBuilder()
+//                            .proxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("www.baidu.com",80)))
+//                            .proxyAuthenticator(new Authenticator() { //代理认证  当responseCode=407 时需要设置
+//                                @Override
+//                                public Request authenticate(Route route, Response response) throws IOException {
+//                                    String auth = Credentials.basic("zhangquan", "123456");
+//                                    Request request = response.request().newBuilder().addHeader("Proxy-Authorization", auth).build();
+//                                    return request;
+//                                }
+//                            })
+//                            .build();
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
+
 /*
 HttpHeadInterceptor----------------start
 LoggingInterceptor----------------start

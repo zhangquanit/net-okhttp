@@ -512,6 +512,7 @@ public class OkHttpClient implements Cloneable, Call.Factory {
 
     /**
      * 设置Http代理
+     * 优先于proxySelector，只有proxy=null时才会检查proxySelector
      * Sets the HTTP proxy that will be used by connections created by this client. This takes
      * precedence over {@link #proxySelector}, which is only honored when this proxy is null (which
      * it is by default). To disable proxy use completely, call {@code setProxy(Proxy.NO_PROXY)}.
@@ -667,6 +668,7 @@ public class OkHttpClient implements Cloneable, Call.Factory {
     }
 
     /**
+     *  设置认证，当相遇状态码=401 时，需要重新请求，并设置消息头Authorization：
      * 	Authenticator authenticator = new Authenticator() {
           @Override
           protected PasswordAuthentication getPasswordAuthentication() {
@@ -688,6 +690,7 @@ public class OkHttpClient implements Cloneable, Call.Factory {
     }
 
     /**
+     * 代理认证，当设置了代理setProxy，且响应状态码为407 时，需要重新请求，设置消息头Proxy-Authorization
      * Sets the authenticator used to respond to challenges from proxy servers. Use {@link
      * #authenticator} to set the authenticator for origin servers.
      *
