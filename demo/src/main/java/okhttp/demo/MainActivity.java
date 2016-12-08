@@ -107,8 +107,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 //        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         LoggingInterceptor loggingInterceptor = new LoggingInterceptor();
 
-        //缓存
-        File cacheDir = new File(getExternalCacheDir(), "okhttp");
+        //缓存文件夹
+        File cacheDir = new File(getCacheDir(), "okhttp_cache");
+//        File cacheDir = new File(getExternalCacheDir(), "okhttp");
         Cache cache = new Cache(cacheDir, 10 * 1024 * 1024);
 
         okHttpClient = new OkHttpClient.Builder()
@@ -122,12 +123,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 .authenticator(new Authenticator() { //HTTP认证  当responseCode=401 时需要设置
                     @Override
                     public Request authenticate(Route route, Response response) throws IOException {
-                        String auth = Credentials.basic("zhangquan", "123456");
+                        String auth = Credentials.basic("zhangsan", "123456");
                         Request request = response.request().newBuilder().addHeader("Authorization", auth).build();
                         return request;
                     }
                 })
                 .build();
+
 
         //设置代理
 //        new Thread(new Runnable() {
@@ -218,7 +220,6 @@ HttpHeadInterceptor----------------end
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), jsonObject.toString());
         Request request = new Request.Builder().url(url)
                 .post(requestBody)
@@ -315,6 +316,7 @@ User-Agent: okhttp/3.4.1
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 handleResponse(response.body().string());
+
             }
         });
 
